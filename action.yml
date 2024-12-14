@@ -1,0 +1,48 @@
+# https://help.github.com/en/articles/metadata-syntax-for-github-actions
+name: 'Docker Bakery'
+description: 'Build multiple targets in one go!'
+author: 'arBmind'
+
+branding:
+  icon: 'anchor'
+  color: 'red'
+
+inputs:
+  bake-file:
+    description: Output Docker Bake file to generate
+    required: false
+    default: 'backery.hcl'
+  docker-file:
+    description: Dockerfile used as receipt
+    required: false
+    default: 'Dockerfile'
+  targets:
+    description: List of Targets in the Dockerfile that should be build
+    required: false
+  build-args:
+    description: Common build arguments for all runs
+    required: false
+  build-args-matrix:
+    description: |
+      JSON object with lists of build arguments where all combinations are generated
+    required: true
+    default: '{}'
+  tag-patterns:
+    description: |
+      List of tag patterns to apply to each target. You can use {target} and
+      names of build arguments as patterns
+    required: true
+  last-tag-patterns:
+    description: |
+      List of tag patterns that are only applied to the last matrix argument
+      that is not mentioned in the pattern
+    required: false
+    default: 'latest'
+
+outputs:
+  bake-file:
+    description: Generated bake file path
+
+runs:
+  using: node20
+  main: dist/index.js
